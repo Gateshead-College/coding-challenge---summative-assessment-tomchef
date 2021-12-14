@@ -1,6 +1,8 @@
 package models;
 
-public class Stock {
+import java.io.Serializable;
+
+public class Stock implements Serializable {
 
     String productName;
     int productQuantity;
