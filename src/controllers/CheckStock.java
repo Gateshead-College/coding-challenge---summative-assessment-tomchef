@@ -1,17 +1,44 @@
 package controllers;
 import models.Stock;
+import models.User;
+
 import java.io.*;
 import java.util.ArrayList;
 import java.util.Scanner;
 public class CheckStock {
     public ArrayList<Stock> stock = new ArrayList<>();
 
-
     public static void main(String[] args) throws IOException, ClassNotFoundException {
-        CheckStock cs = new CheckStock();
-        cs.checkPantry();
-        cs.menu1();
+CheckStock cs = new CheckStock();
+cs.login();
+
     }
+
+    public void login() throws IOException, ClassNotFoundException {
+        ArrayList<User> users = new ArrayList<>();
+
+            users.add(new User("Tom", "Lehane","1111",true, "pass"));
+            users.add(new User("James", "Joyce", "1112", false, "jj1"));
+
+
+            System.out.println("Hi, please enter your userID to continue:");
+            String uid = new Scanner(System.in).nextLine();
+            System.out.println("and now your password:");
+            String pw = new Scanner(System.in).nextLine();
+            for(User u : users){
+                if(uid.equals(u.getUserID()) && u.getPassword().equals(pw)){
+                    System.out.println("yo");
+                    checkPantry();
+                    break;
+                }
+
+                else {
+                    System.out.println("Invalid un/pw");
+                }
+            }
+
+    }
+
 
     private void checkPantry() throws IOException, ClassNotFoundException {
         System.out.println("Yo here's what we got on the shelves");
