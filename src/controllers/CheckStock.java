@@ -17,6 +17,7 @@ cs.login();
     }
 
     public void login() throws IOException, ClassNotFoundException {
+        loadUser();
 
 
             users.add(new User("Tom", "Lehane","1111",true, "pass"));
@@ -36,7 +37,9 @@ cs.login();
                 }
 
                 else {
+                    //CREATE ACCOUNT??????????????????
                     System.out.println("Invalid un/pw");
+                    login();
                 }
             }
 
@@ -65,7 +68,9 @@ private void changePass() throws IOException, ClassNotFoundException {
         System.out.println("Change password");
         String newpass = (new Scanner(System.in).nextLine());
         loggedInAs.setPassword(newpass);
-        System.out.println("Password changed");}
+        System.out.println("Password changed");
+    saveUser();
+    }
     else {
         System.out.println("Invalid pw");
     }
@@ -74,7 +79,7 @@ private void changePass() throws IOException, ClassNotFoundException {
 
     private void checkPantry() throws IOException, ClassNotFoundException {
         System.out.println("Yo here's what we got on the shelves");
-        load();
+        loadStock();
         for (Stock j : stock) {
             System.out.println(j.toString());
         }
@@ -124,7 +129,7 @@ private void changePass() throws IOException, ClassNotFoundException {
         int ID = (addID.nextInt());
 
         stock.add(new Stock(name, quantity, source, ID));
-        save();
+        saveStock();
         menu1();
     }
 
@@ -139,7 +144,7 @@ private void changePass() throws IOException, ClassNotFoundException {
                 stock.remove(i);
             }
         }
-        save();
+        saveStock();
         menu1();
     }
 
@@ -174,33 +179,33 @@ private void changePass() throws IOException, ClassNotFoundException {
                 System.out.println("Enter new name");
                 String newName = new Scanner(System.in).nextLine();
                 s.setProductName(newName);
-                save();
+                saveStock();
                 menu1();
 
             case 2:
                 System.out.println("Enter new quantity");
                 int newQuant = new Scanner(System.in).nextInt();
                 s.setProductQuantity(newQuant);
-                save();
+                saveStock();
                 menu1();
 
             case 3:
                 System.out.println("Enter new source");
                 String newSource = new Scanner(System.in).nextLine();
                 s.setSource(newSource);
-                save();
+                saveStock();
                 menu1();
 
             case 4:
                 System.out.println("Enter new product ID");
                 int newID = new Scanner(System.in).nextInt();
                 s.setProductID(newID);
-                save();
+                saveStock();
                 menu1();
         }
     }
 
-    private void save() throws IOException {
+    private void saveStock() throws IOException {
         FileOutputStream file = new FileOutputStream("stock.txt");
         ObjectOutputStream output = new ObjectOutputStream(file);
         output.writeObject(stock);
@@ -208,12 +213,27 @@ private void changePass() throws IOException, ClassNotFoundException {
         output.close();
     }
 
-    private void load() throws IOException, ClassNotFoundException {
+    private void loadStock() throws IOException, ClassNotFoundException {
         FileInputStream file = new FileInputStream("stock.txt");
         ObjectInputStream input = new ObjectInputStream(file);
         stock = (ArrayList<Stock>) input.readObject();
         input.close();
 
+    }
+
+    private void saveUser() throws IOException {
+        FileOutputStream file = new FileOutputStream("users.txt");
+        ObjectOutputStream output = new ObjectOutputStream(file);
+        output.writeObject(users);
+        output.flush();
+        output.close();
+    }
+
+    private void loadUser() throws IOException, ClassNotFoundException {
+        FileInputStream file = new FileInputStream("users.txt");
+        ObjectInputStream input = new ObjectInputStream(file);
+        users = (ArrayList<User>) input.readObject();
+        input.close();
     }
 }
 
