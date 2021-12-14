@@ -7,6 +7,8 @@ import java.util.ArrayList;
 import java.util.Scanner;
 public class CheckStock {
     public ArrayList<Stock> stock = new ArrayList<>();
+    ArrayList<User> users = new ArrayList<>();
+    User loggedInAs = null;
 
     public static void main(String[] args) throws IOException, ClassNotFoundException {
 CheckStock cs = new CheckStock();
@@ -15,7 +17,7 @@ cs.login();
     }
 
     public void login() throws IOException, ClassNotFoundException {
-        ArrayList<User> users = new ArrayList<>();
+
 
             users.add(new User("Tom", "Lehane","1111",true, "pass"));
             users.add(new User("James", "Joyce", "1112", false, "jj1"));
@@ -27,8 +29,9 @@ cs.login();
             String pw = new Scanner(System.in).nextLine();
             for(User u : users){
                 if(uid.equals(u.getUserID()) && u.getPassword().equals(pw)){
-                    System.out.println("yo");
-                    checkPantry();
+                    System.out.println("Logging in as " + u.getUserID());
+                    loggedInAs = u;
+                    userMenu();
                     break;
                 }
 
@@ -38,7 +41,36 @@ cs.login();
             }
 
     }
+private void userMenu() throws IOException, ClassNotFoundException {
+    System.out.println("1 - Change password");
+    System.out.println("2 - Check stock");
+    int choice = Integer.parseInt(new Scanner(System.in).nextLine());
+    switch (choice) {
+        case 1 :
+            changePass();
+            break;
+        case 2 :
+            checkPantry();
+            break;
+        default:
+            System.out.println("???");
+            userMenu();
+    }
+}
 
+private void changePass() throws IOException, ClassNotFoundException {
+    System.out.println("Enter old password");
+    String pw = new Scanner(System.in).nextLine();
+    if (pw.equals(loggedInAs.getPassword())){
+        System.out.println("Change password");
+        String newpass = (new Scanner(System.in).nextLine());
+        loggedInAs.setPassword(newpass);
+        System.out.println("Password changed");}
+    else {
+        System.out.println("Invalid pw");
+    }
+    userMenu();
+}
 
     private void checkPantry() throws IOException, ClassNotFoundException {
         System.out.println("Yo here's what we got on the shelves");
