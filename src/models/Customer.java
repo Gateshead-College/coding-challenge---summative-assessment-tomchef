@@ -2,14 +2,14 @@ package models;
 
 public class Customer {
     String cusName;
-    String cusAccNum;
+    String cusID;
     String cusemail;
     String cusphone;
     String cusadd;
 
-    public Customer(String cusName, String cusAccNum, String cusemail, String cusphone, String cusadd) {
+    public Customer(String cusName, String cusID, String cusemail, String cusphone, String cusadd) {
         this.cusName = cusName;
-        this.cusAccNum = cusAccNum;
+        this.cusID = cusID;
         this.cusemail = cusemail;
         this.cusphone = cusphone;
         this.cusadd = cusadd;
@@ -23,12 +23,12 @@ public class Customer {
         this.cusName = cusName;
     }
 
-    public String getCusAccNum() {
-        return cusAccNum;
+    public String getCusID() {
+        return cusID;
     }
 
-    public void setCusAccNum(String cusAccNum) {
-        this.cusAccNum = cusAccNum;
+    public void setCusID(String cusID) {
+        this.cusID = cusID;
     }
 
     public String getCusemail() {

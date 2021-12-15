@@ -1,4 +1,5 @@
 package controllers;
+import models.Customer;
 import models.Stock;
 import models.User;
 
@@ -10,6 +11,7 @@ import java.util.Scanner;
 public class CheckStock {
     public ArrayList<Stock> stock = new ArrayList<>();
     ArrayList<User> users = new ArrayList<>();
+    ArrayList<Customer> custys = new ArrayList<>();
     User loggedInAs = null;
 
     public static void main(String[] args) throws IOException, ClassNotFoundException {
@@ -20,6 +22,8 @@ public class CheckStock {
     public void login() throws IOException, ClassNotFoundException {
         ArrayList<User> users = new ArrayList<>();
         users.add(new User("admin", "admin","9999",true, "admin"));
+        ArrayList<Customer> custys = new ArrayList<>();
+        custys.add(new Customer("Leo Bloom", "dublin5", "lb1@dc.com", "+447521209413", "5 Ginnel Street, DC14"));
 
         if (Files.exists(Path.of("users.txt"))) {
         loadUser();
