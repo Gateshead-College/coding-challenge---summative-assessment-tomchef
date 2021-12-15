@@ -3,6 +3,8 @@ import models.Stock;
 import models.User;
 
 import java.io.*;
+import java.nio.file.Files;
+import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.Scanner;
 public class CheckStock {
@@ -13,17 +15,18 @@ public class CheckStock {
     public static void main(String[] args) throws IOException, ClassNotFoundException {
         CheckStock cs = new CheckStock();
         cs.login();
-
     }
 
     public void login() throws IOException, ClassNotFoundException {
+        ArrayList<User> users = new ArrayList<>();
+        users.add(new User("admin", "admin","9999",true, "admin"));
 
+        if (Files.exists(Path.of("users.txt"))) {
         loadUser();
-
-
-        users.add(new User("Tom", "Lehane","1111",true, "pass"));
-        users.add(new User("James", "Joyce", "1112", false, "jj1"));
-
+    }
+        else {
+            createUser();
+        }
 
         System.out.println("Hi, please enter your userID to continue:");
         String uid = new Scanner(System.in).nextLine();
@@ -38,16 +41,34 @@ public class CheckStock {
             }
 
             else {
-                //CREATE ACCOUNT??????????????????
                 System.out.println("Invalid un/pw");
                 login();
             }
         }
 
     }
+
+    private void createUser() {
+        System.out.println("Create new account");
+        System.out.println("Enter forename");
+        String newfor = new Scanner(System.in).nextLine();
+        System.out.println("Enter surname");
+        String newsur = new Scanner(System.in).nextLine();
+        System.out.println("Enter userID");  //IF KNOWN/GENERATE AUTO??????????????????????????????????????????????
+        String newuid = new Scanner(System.in).nextLine();
+        System.out.println("Enter password");
+        String newpass = new Scanner(System.in).nextLine();
+        User u = new User(newfor, newsur, newuid, false, newpass);
+        users.add(u);
+
+    }
+
     private void userMenu() throws IOException, ClassNotFoundException {
         System.out.println("1 - Change password");
         System.out.println("2 - Check stock");
+        if (loggedInAs.isAdmin()) {
+            System.out.println("3 - Change user details");
+        }
         int choice = Integer.parseInt(new Scanner(System.in).nextLine());
         switch (choice) {
             case 1 :
@@ -56,10 +77,47 @@ public class CheckStock {
             case 2 :
                 checkPantry();
                 break;
+            case 3 :
+                viewUsers();
+                changeUsers();
             default:
                 System.out.println("???");
                 userMenu();
         }
+    }
+
+    private void viewUsers() {
+        for (User u : users) {
+            System.out.println(u.getForename() + " " + u.getSurname() + " : " + u.getUserID() + " " + u.getPassword()
+             + " : Admin: " + u.isAdmin());
+        }
+    }
+
+    private void changeUsers() throws IOException, ClassNotFoundException {
+            System.out.println("Which account do you want to change?");
+            int x = 1;
+            for (User a : users) {
+                System.out.println(x + " - " + a.getUserID());
+                x++;
+            }
+            System.out.println(x + " - Go back");
+            int choice = Integer.parseInt(new Scanner(System.in).nextLine());
+            changeUserChoice(choice);
+        }
+
+    private void changeUserChoice(int choice) throws IOException, ClassNotFoundException {
+        if (choice > users.size()) {
+            userMenu();
+        }
+        User a = users.get(choice - 1);
+        System.out.println("Changing password of user " + a.getUserID());
+        System.out.println("Enter new password");
+        String newadminpass = (new Scanner(System.in).nextLine());
+        a.setPassword(newadminpass);
+        System.out.println("Password changed");
+        saveUser();
+        userMenu();
+
     }
 
     private void changePass() throws IOException, ClassNotFoundException {

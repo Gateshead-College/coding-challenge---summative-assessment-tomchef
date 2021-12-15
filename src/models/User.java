@@ -1,6 +1,7 @@
 package models;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 
 public class User implements Serializable {
 
@@ -17,6 +18,7 @@ public class User implements Serializable {
         this.admin = admin;
         this.password = password;
     }
+
 
     public String getForename() {
         return forename;
