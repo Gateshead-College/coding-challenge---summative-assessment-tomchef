@@ -1,28 +1,30 @@
 package models;
 
+import java.util.ArrayList;
+
 public class Order {
 
     String cusID;
-    OrderItem order;
+    ArrayList<OrderItem> order;
 
-    public Order(String cusID, OrderItem order) {
+    public Order(String cusID, ArrayList<OrderItem> order) {
         this.cusID = cusID;
         this.order = order;
     }
 
-    public String getCusAccNum() {
+    public String getCusID() {
         return cusID;
     }
 
-    public void setCusAccNum(String cusID) {
+    public void setCusID(String cusID) {
         this.cusID = cusID;
     }
 
-    public OrderItem getOrder() {
+    public ArrayList<OrderItem> getOrder() {
         return order;
     }
 
-    public void setOrder(OrderItem order) {
+    public void setOrder(ArrayList<OrderItem> order) {
         this.order = order;
     }
 }

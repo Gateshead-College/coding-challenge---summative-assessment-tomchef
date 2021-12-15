@@ -8,16 +8,23 @@ public class Stock implements Serializable {
     int productQuantity;
     String source;
     int productID;
+    double price;
 
-    public Stock(String productName, int productQuantity, String source, int productID) {
+    public Stock(String productName, int productQuantity, String source, int productID, double price) {
         this.productName = productName;
         this.productQuantity = productQuantity;
         this.source = source;
         this.productID = productID;
+        this.price = price;
     }
 
-    public String toString() {
-        return productName + " : " + productQuantity + " : " + source + " : " + productID;
+
+    public double getPrice() {
+        return price;
+    }
+
+    public void setPrice(double price) {
+        this.price = price;
     }
 
     public String getProductName() {

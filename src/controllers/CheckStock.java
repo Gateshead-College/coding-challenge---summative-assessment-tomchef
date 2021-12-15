@@ -1,17 +1,19 @@
 package controllers;
-import models.Customer;
-import models.Stock;
-import models.User;
+import models.*;
 
 import java.io.*;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.ArrayList;
+import java.util.Objects;
 import java.util.Scanner;
 public class CheckStock {
-    public ArrayList<Stock> stock = new ArrayList<>();
+    ArrayList<Stock> stock = new ArrayList<>();
     ArrayList<User> users = new ArrayList<>();
     ArrayList<Customer> custys = new ArrayList<>();
+    ArrayList<OrderItem> ois = new ArrayList<>();
+    ArrayList<Order> bercow = new ArrayList<>();
+
     User loggedInAs = null;
 
     public static void main(String[] args) throws IOException, ClassNotFoundException {
@@ -24,6 +26,7 @@ public class CheckStock {
         users.add(new User("admin", "admin","9999",true, "admin"));
         ArrayList<Customer> custys = new ArrayList<>();
         custys.add(new Customer("Leo Bloom", "dublin5", "lb1@dc.com", "+447521209413", "5 Ginnel Street, DC14"));
+
 
         if (Files.exists(Path.of("users.txt"))) {
         loadUser();
@@ -52,7 +55,7 @@ public class CheckStock {
 
     }
 
-    private void createUser() {
+    private void createUser() throws IOException, ClassNotFoundException {
         System.out.println("Create new account");
         System.out.println("Enter forename");
         String newfor = new Scanner(System.in).nextLine();
@@ -64,14 +67,17 @@ public class CheckStock {
         String newpass = new Scanner(System.in).nextLine();
         User u = new User(newfor, newsur, newuid, false, newpass);
         users.add(u);
+        saveUser();
+        userMenu();
 
     }
 
     private void userMenu() throws IOException, ClassNotFoundException {
         System.out.println("1 - Change password");
         System.out.println("2 - Check stock");
+        System.out.println("3 - Input order");
         if (loggedInAs.isAdmin()) {
-            System.out.println("3 - Change user details");
+            System.out.println("4 - Change user details");
         }
         int choice = Integer.parseInt(new Scanner(System.in).nextLine());
         switch (choice) {
@@ -82,12 +88,49 @@ public class CheckStock {
                 checkPantry();
                 break;
             case 3 :
+                addOrder();
+                break;
+            case 4 :
                 viewUsers();
                 changeUsers();
             default:
                 System.out.println("???");
                 userMenu();
         }
+    }
+
+    private void addOrder() {
+
+        System.out.println("Input Product ID");
+        int addProductID = new Scanner(System.in).nextInt();
+        System.out.println("Input quantity");
+        int addOrderQuantity = new Scanner(System.in).nextInt();
+        OrderItem oi = new OrderItem(addProductID, addOrderQuantity);
+        ois.add(oi);
+        for (Stock j : stock) {
+            for (OrderItem o : ois)
+            if (j.getProductId() == (o.getProductID())) {
+               double cost1 = (j.getPrice() * o.getOrderQuantity());
+               o.setPrice(cost1);
+           }
+       }
+        System.out.println("Total so far : $" + getCost());
+        System.out.println("Anything else? (y/n)");
+        String addyn = new Scanner(System.in).nextLine();
+        if (Objects.equals(addyn, "y")) {
+            addOrder();
+        }
+        System.out.println("Who's ordering? Input Customer ID");
+        String addcusID = new Scanner(System.in).nextLine();
+        Order o = new Order(addcusID, ois);
+    }
+
+    public double getCost() {
+        double total = 0;
+        for (int i = 0; i < ois.size(); i++) {
+            total += ois.get(i).getPrice();
+        }
+        return total;
     }
 
     private void viewUsers() {
@@ -131,7 +174,6 @@ public class CheckStock {
             System.out.println("Change password");
             String newpass = (new Scanner(System.in).nextLine());
             loggedInAs.setPassword(newpass);
-
             System.out.println("Password changed");
             saveUser();
         } else {
@@ -142,10 +184,19 @@ public class CheckStock {
 
     private void checkPantry() throws IOException, ClassNotFoundException {
         System.out.println("Yo here's what we got on the shelves");
-        loadStock();
-        for (Stock j : stock) {
-            System.out.println(j.toString());
+        if (Files.exists(Path.of("stock.txt"))) {
+            loadStock();
+            for (Stock j : stock) {
+                System.out.println(j.getProductName() + " : " + j.getProductQuantity() + " : " + j.getProductId() +
+                        " : " + j.getSource() + " : " + j.getPrice());
+            }
         }
+        else {
+            System.out.println("Nothing");
+        }
+        menu1();
+
+
     }
 
     private void menu1() throws IOException, ClassNotFoundException {
@@ -169,6 +220,7 @@ public class CheckStock {
                 break;
 
             case 4:
+                userMenu();
                 break;
         }
 
@@ -191,7 +243,12 @@ public class CheckStock {
         Scanner addID = new Scanner(System.in);
         int ID = (addID.nextInt());
 
-        stock.add(new Stock(name, quantity, source, ID));
+        System.out.println("Enter price");
+        Scanner addPrice = new Scanner(System.in);
+        double price = (addPrice.nextDouble());
+
+        Stock s = new Stock(name, quantity, source, ID, price);
+        stock.add(s);
         saveStock();
         menu1();
     }
@@ -232,7 +289,8 @@ public class CheckStock {
         System.out.println("2 - Quantity");
         System.out.println("3 - Source");
         System.out.println("4 - Product ID");
-        System.out.println("5 - Exit");
+        System.out.println("5 - Price");
+        System.out.println("6 - Exit");
         getStockEdit(s, Integer.parseInt(new Scanner(System.in).nextLine()));
     }
 
@@ -264,6 +322,16 @@ public class CheckStock {
                 int newID = new Scanner(System.in).nextInt();
                 s.setProductID(newID);
                 saveStock();
+                menu1();
+
+            case 5:
+                System.out.println("Enter new price");
+                double newPrice = new Scanner(System.in).nextDouble();
+                s.setPrice(newPrice);
+                saveStock();
+                menu1();
+
+            default:
                 menu1();
         }
     }
