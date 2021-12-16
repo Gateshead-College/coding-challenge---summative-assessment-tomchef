@@ -7,10 +7,32 @@ public class Order {
     String cusID;
     ArrayList<OrderItem> order;
     double price;
+    String cusName;
+    String cusAdd;
 
     public Order(String cusID, ArrayList<OrderItem> order) {
         this.cusID = cusID;
         this.order = order;
+    }
+
+    public String toString() {
+        return getClass().getSimpleName() + " : " + cusID + " : " + cusName + " : " + price + " : " + order + " : " + cusAdd;
+    }
+
+    public String getCusName() {
+        return cusName;
+    }
+
+    public void setCusName(String cusName) {
+        this.cusName = cusName;
+    }
+
+    public String getCusAdd() {
+        return cusAdd;
+    }
+
+    public void setCusAdd(String cusAdd) {
+        this.cusAdd = cusAdd;
     }
 
     public String getCusID() {

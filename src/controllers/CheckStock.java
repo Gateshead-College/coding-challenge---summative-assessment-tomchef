@@ -121,8 +121,9 @@ public class CheckStock {
             userMenu();
         }
         Order o = bercow.get(choice - 1);
-        //GET NAME, ITEMS (PRODUCT ID, PRODUCT NAME, PRODUCT QUANT, UNIT COST, TOTAL COST), ADDRESS, TOTAL COST
-        System.out.println(o.getOrder());
+        //from order we need name, add, total cost
+        System.out.println(o.toString());
+        userMenu();
     }
 
 
@@ -139,6 +140,8 @@ public class CheckStock {
             if (j.getProductId() == (o.getProductID())) {
                double cost1 = (j.getPrice() * o.getOrderQuantity());
                o.setPrice(cost1);
+               o.setUnitCost(j.getPrice());
+               o.setProductName(j.getProductName());
            }
        }
         System.out.println("Total so far : $" + getCost());
@@ -151,6 +154,14 @@ public class CheckStock {
         String addcusID = new Scanner(System.in).nextLine();
         Order o = new Order(addcusID, ois);
         bercow.add(o);
+        custys.add(new Customer("Leo Bloom", "dublin5", "lb1@dc.com", "+447521209413", "5 Ginnel Street, DC14"));
+        for (Customer c : custys) {
+            for (Order b : bercow)
+                if (c.getCusID().equalsIgnoreCase(addcusID)) {
+                    b.setCusName(c.getCusName());
+                    b.setCusAdd(c.getCusadd());
+                }
+        }
         o.setPrice(getCost());
         userMenu();
     }

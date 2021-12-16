@@ -5,11 +5,33 @@ public class OrderItem {
     int productID;
     int orderQuantity;
     double price;
+    double unitCost;
+    String productName;
 
 
     public OrderItem(int productID, int orderQuantity) {
         this.productID = productID;
         this.orderQuantity = orderQuantity;
+    }
+
+    public String toString() {
+        return getClass().getSimpleName() + " = " + productName + " : $" + unitCost + " : x" + orderQuantity + " : $" + price + " : " + productID;
+    }
+
+    public double getUnitCost() {
+        return unitCost;
+    }
+
+    public void setUnitCost(double unitCost) {
+        this.unitCost = unitCost;
+    }
+
+    public String getProductName() {
+        return productName;
+    }
+
+    public void setProductName(String productName) {
+        this.productName = productName;
     }
 
     public int getProductID() {
