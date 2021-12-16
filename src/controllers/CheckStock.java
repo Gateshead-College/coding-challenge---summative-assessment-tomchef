@@ -76,8 +76,9 @@ public class CheckStock {
         System.out.println("1 - Change password");
         System.out.println("2 - Check stock");
         System.out.println("3 - Input order");
+        System.out.println("4 - View orders");
         if (loggedInAs.isAdmin()) {
-            System.out.println("4 - Change user details");
+            System.out.println("5 - Change user details");
         }
         int choice = Integer.parseInt(new Scanner(System.in).nextLine());
         switch (choice) {
@@ -91,6 +92,9 @@ public class CheckStock {
                 addOrder();
                 break;
             case 4 :
+                viewOrders();
+                break;
+            case 5 :
                 viewUsers();
                 changeUsers();
             default:
@@ -99,7 +103,30 @@ public class CheckStock {
         }
     }
 
-    private void addOrder() {
+    private void viewOrders() throws IOException, ClassNotFoundException {
+
+        System.out.println("Which order do you want to view?");
+        int x = 1;
+        for (Order o : bercow) {
+            System.out.println(x + " - " + o.getCusID() + " : $" + o.getPrice());
+            x++;
+        }
+        System.out.println(x + " - Go back");
+        int choice = Integer.parseInt(new Scanner(System.in).nextLine());
+        viewOrderChoice(choice);
+    }
+
+    private void viewOrderChoice(int choice) throws IOException, ClassNotFoundException {
+        if (choice > bercow.size()) {
+            userMenu();
+        }
+        Order o = bercow.get(choice - 1);
+        //GET NAME, ITEMS (PRODUCT ID, PRODUCT NAME, PRODUCT QUANT, UNIT COST, TOTAL COST), ADDRESS, TOTAL COST
+        System.out.println(o.getOrder());
+    }
+
+
+    private void addOrder() throws IOException, ClassNotFoundException {
 
         System.out.println("Input Product ID");
         int addProductID = new Scanner(System.in).nextInt();
@@ -123,6 +150,9 @@ public class CheckStock {
         System.out.println("Who's ordering? Input Customer ID");
         String addcusID = new Scanner(System.in).nextLine();
         Order o = new Order(addcusID, ois);
+        bercow.add(o);
+        o.setPrice(getCost());
+        userMenu();
     }
 
     public double getCost() {
